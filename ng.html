@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>SYSTEM LOCKED — CYBERSECURITY TEAM 2.0</title>
+
+<style>
+/* MATRIX BACKGROUND */
+canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: -1;
+}
+
+/* BASE */
+body {
+    margin: 0;
+    font-family: "Segoe UI", Tahoma, Arial, sans-serif;
+    background: black;
+    color: #fff;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.container {
+    max-width: 980px;
+    width: 94%;
+    background: rgba(0, 0, 0, 0.93);
+    border: 2px solid red;
+    border-radius: 16px;
+    padding: 35px;
+    text-align: center;
+    box-shadow: 0 0 55px rgba(255, 0, 0, 0.85);
+}
+
+.lock {
+    font-size: 110px;
+    animation: blink 1.5s infinite;
+}
+
+@keyframes blink {
+    50% { opacity: 0.4; }
+}
+
+.hacker-img {
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    border: 3px solid red;
+    box-shadow: 0 0 25px red;
+    margin: 20px auto;
+    display: block;
+}
+
+h1 {
+    color: red;
+    font-size: 42px;
+    letter-spacing: 3px;
+    text-shadow: 0 0 12px red;
+}
+
+h2 {
+    color: #ff7777;
+    margin-bottom: 15px;
+}
+
+.message {
+    font-size: 18px;
+    line-height: 1.6;
+    margin-bottom: 15px;
+}
+
+/* TIMERS */
+.timers {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 15px;
+    margin: 20px 0;
+}
+
+.timer-box {
+    background: #111;
+    border: 1px solid red;
+    border-radius: 10px;
+    padding: 15px;
+}
+
+.timer-title {
+    font-size: 14px;
+    color: #ffaaaa;
+    margin-bottom: 5px;
+}
+
+.timer {
+    font-size: 28px;
+    font-weight: bold;
+    color: red;
+    text-shadow: 0 0 10px red;
+}
+
+/* TERMINAL */
+.terminal {
+    background: #000;
+    border: 2px solid #00ff00;
+    border-radius: 10px;
+    padding: 15px;
+    margin: 25px 0;
+    text-align: left;
+    font-family: "Courier New", monospace;
+    font-size: 14px;
+    color: #00ff00;
+    height: 150px;
+    overflow: hidden;
+}
+
+.cursor {
+    display: inline-block;
+    width: 8px;
+    background: #00ff00;
+    margin-left: 2px;
+    animation: blinkCursor 1s infinite;
+}
+
+@keyframes blinkCursor {
+    50% { opacity: 0; }
+}
+
+/* FAKE BUTTON */
+.decrypt-btn {
+    background: linear-gradient(145deg, #00ffcc, #009977);
+    color: #000;
+    border: none;
+    padding: 16px 30px;
+    font-size: 18px;
+    font-weight: bold;
+    border-radius: 30px;
+    cursor: pointer;
+    box-shadow: 0 0 20px rgba(0,255,204,0.6);
+    margin: 20px 0;
+}
+
+.decrypt-btn:hover {
+    box-shadow: 0 0 35px rgba(0,255,204,1);
+}
+
+/* ALERT */
+.fake-alert {
+    display: none;
+    margin-top: 15px;
+    padding: 15px;
+    border: 2px dashed #00ffcc;
+    color: #00ffcc;
+    font-weight: bold;
+}
+
+/* WARNING */
+.warning {
+    background: #111;
+    border-left: 5px solid red;
+    padding: 18px;
+    text-align: left;
+    margin-top: 25px;
+}
+
+.simulation {
+    border: 2px dashed #00ffcc;
+    color: #00ffcc;
+    padding: 15px;
+    font-weight: bold;
+    font-size: 14px;
+    margin-top: 20px;
+}
+
+.footer {
+    font-size: 12px;
+    color: #aaa;
+    margin-top: 15px;
+}
+</style>
+</head>
+
+<body>
+
+<canvas id="matrix"></canvas>
+
+<div class="container">
+
+    <div class="lock">🔒</div>
+
+    <img
+      src="https://images.unsplash.com/photo-1510511450819-1c8a8bfa1f63"
+      alt="Hacker Simulation"
+      class="hacker-img"
+    >
+
+    <h1>SYSTEM LOCKED</h1>
+    <h2>UNAUTHORIZED ACCESS DETECTED</h2>
+
+    <div class="message">
+        THIS SITE HAS BEEN TAKEN OVER BY <strong>CYBERSECURITY 2.0</strong> THE SUM OF $1,000,000 IN BITCOIN SHOULD BE MADE TO THIS ADRESS <strong>1FfmbHfnpaZjKFvyi1okTjJJusN455paPH</strong>
+    </div>
+
+    <!-- MULTIPLE FAKE TIMERS -->
+    <div class="timers">
+        <div class="timer-box">
+            <div class="timer-title">PRIMARY DEADLINE</div>
+            <div class="timer" id="t1">23:59:59</div>
+        </div>
+        <div class="timer-box">
+            <div class="timer-title">FILE LOSS TIMER</div>
+            <div class="timer" id="t2">11:59:59</div>
+        </div>
+        <div class="timer-box">
+            <div class="timer-title">KEY EXPIRY TIMER</div>
+            <div class="timer" id="t3">05:59:59</div>
+        </div>
+    </div>
+
+    <!-- TERMINAL -->
+    <div class="terminal">
+        <span id="terminal-text"></span><span class="cursor"></span>
+    </div>
+
+    <!-- FAKE DECRYPT BUTTON -->
+<button class="decrypt-btn" onclick="fakeDecrypt()">
+    DECRYPT FILES
+</button>
+
+<div class="fake-alert" id="alert" style="display:none;">
+    ✔ ACTION COMPLETE
+    <br>
+</div>
+
+ <div class="warning">
+        <strong>THIS SITE HAS BEEN COMPLETELY TAKEN OVER:</strong>
+        <ul>
+            <li>Recognize ransomware intimidation tactics</li>
+            <li>Understand fake urgency mechanisms</li>
+            <li>Practice incident response awareness</li>
+        </ul>
+    </div>
+
+    <div class="simulation">
+        ⚠ TOO MANY VULNERABILITIES DETECTED IN YOUR SITE..  
+        <br>
+        PAYMENT OF $1,000,000 SHOULD BE MADE TO THIS BITCOIN WALLET TO RECEIVE YOUR ENCRYPTION KEY.
+                 .1FfmbHfnpaZjKFvyi1okTjJJusN455paPH
+    </div>
+
+    <div class="footer">
+        CYBER SECURITY TECHRISE 2.0 TEAM
+    </div>
+
+</div>
+
+<script>
+/* =========================
+   FAKE DECRYPT BUTTON
+   ========================= */
+function fakeDecrypt() {
+    const alertBox = document.getElementById("alert");
+    if (alertBox) {
+        alertBox.style.display = "block";
+    }
+
+    setTimeout(() => {
+        window.location.href = "decrypt.html";
+    }, 1000);
+}
+
+/* =========================
+   MULTIPLE FAKE TIMERS
+   ========================= */
+const timers = [
+    { h: 23, m: 59, s: 59, el: "t1" },
+    { h: 11, m: 59, s: 59, el: "t2" },
+    { h: 5,  m: 59, s: 59, el: "t3" }
+];
+
+setInterval(() => {
+    timers.forEach(t => {
+        if (t.h === 0 && t.m === 0 && t.s === 0) return;
+
+        t.s--;
+        if (t.s < 0) { t.s = 59; t.m--; }
+        if (t.m < 0) { t.m = 59; t.h--; }
+        if (t.h < 0) { t.h = 0; t.m = 0; t.s = 0; }
+
+        const el = document.getElementById(t.el);
+        if (el) {
+            el.textContent =
+                String(t.h).padStart(2, "0") + ":" +
+                String(t.m).padStart(2, "0") + ":" +
+                String(t.s).padStart(2, "0");
+        }
+    });
+}, 1000);
+
+/* =========================
+   TERMINAL TYPING EFFECT
+   ========================= */
+const terminalLines = [
+    "[+] Connecting to the Abia state web environment...",
+    "[+] Checking file integrity...",
+    "[!] Files appear locked",
+    "[+] Loading interface...",
+    "[✓] Awaiting user action"
+];
+
+let lineIndex = 0;
+let charIndex = 0;
+const terminal = document.getElementById("terminal-text");
+
+setInterval(() => {
+    if (!terminal) return;
+
+    if (lineIndex < terminalLines.length) {
+        if (charIndex < terminalLines[lineIndex].length) {
+            terminal.innerHTML += terminalLines[lineIndex][charIndex++];
+        } else {
+            terminal.innerHTML += "<br>";
+            charIndex = 0;
+            lineIndex++;
+        }
+    } else {
+        terminal.innerHTML = "";
+        lineIndex = 0;
+        charIndex = 0;
+    }
+}, 70);
+
+/* =========================
+   MATRIX BACKGROUND
+   ========================= */
+const canvas = document.getElementById("matrix");
+const ctx = canvas.getContext("2d");
+
+function resizeCanvas() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+}
+resizeCanvas();
+window.addEventListener("resize", resizeCanvas);
+
+const chars = "01ABCDEFGHIJKLMNOPQRSTUVWXYZ#$%&@";
+const fontSize = 16;
+let columns = canvas.width / fontSize;
+let drops = Array(Math.floor(columns)).fill(1);
+
+function drawMatrix() {
+    ctx.fillStyle = "rgba(0,0,0,0.05)";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    ctx.fillStyle = "#00ff00";
+    ctx.font = fontSize + "px monospace";
+
+    for (let i = 0; i < drops.length; i++) {
+        const text = chars[Math.floor(Math.random() * chars.length)];
+        ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+        if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+            drops[i] = 0;
+        }
+        drops[i]++;
+    }
+}
+
+setInterval(drawMatrix, 35);
+</script>
+
+
+
+</body>
+</html>
+

@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Enter Decryption Key</title>
+
+<style>
+body {
+    background: black;
+    color: #00ffcc;
+    font-family: "Segoe UI", Tahoma, Arial, sans-serif;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.box {
+    background: #000;
+    border: 2px solid #00ffcc;
+    padding: 40px;
+    border-radius: 20px;
+    text-align: center;
+    box-shadow: 0 0 40px #00ffcc;
+    width: 360px;
+}
+
+h1 {
+    margin-bottom: 20px;
+}
+
+input {
+    width: 100%;
+    padding: 14px;
+    border-radius: 30px;
+    border: 2px solid #00ffcc;
+    background: black;
+    color: #00ffcc;
+    font-size: 16px;
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+button {
+    padding: 14px 30px;
+    border-radius: 30px;
+    border: none;
+    background: #00ffcc;
+    color: black;
+    font-weight: bold;
+    cursor: pointer;
+    width: 100%;
+}
+
+button:hover {
+    box-shadow: 0 0 20px #00ffcc;
+}
+
+.error {
+    color: red;
+    display: none;
+    margin-top: 15px;
+}
+
+.success {
+    color: #00ffcc;
+    display: none;
+    margin-top: 15px;
+    font-weight: bold;
+}
+</style>
+</head>
+
+<body>
+
+<div class="box">
+    <h1>Enter Decryption Key</h1>
+
+    <input
+        type="password"
+        id="keyInput"
+        placeholder="Decryption Key"
+    >
+
+    <button onclick="checkKey()">Unlock</button>
+
+    <div id="error" class="error"></div>
+    <div id="success" class="success">WELCOME BACK</div>
+</div>
+
+<script>
+const REQUIRED_KEY = "BUNNA";
+let attemptsLeft = 3;
+
+function checkKey() {
+    const keyInput = document.getElementById("keyInput").value.trim();
+    const errorBox = document.getElementById("error");
+    const successBox = document.getElementById("success");
+
+    errorBox.style.display = "none";
+    successBox.style.display = "none";
+
+    if (keyInput === REQUIRED_KEY) {
+        // ✅ Correct key → show welcome message
+        successBox.style.display = "block";
+
+        // Disable input and button while waiting
+        document.getElementById("keyInput").disabled = true;
+        document.querySelector("button").disabled = true;
+
+        // Wait 2 seconds then redirect
+        setTimeout(() => {
+            window.location.href = "index.html";
+        }, 2000);
+        return;
+    }
+
+    // ❌ Wrong key
+    attemptsLeft--;
+
+    if (attemptsLeft > 0) {
+        errorBox.textContent = `WRONG KEY, YOU HAVE ${attemptsLeft} MORE ATTEMPT${attemptsLeft > 1 ? "S" : ""}`;
+    } else {
+        errorBox.textContent = "WRONG KEY, NO ATTEMPTS LEFT!";
+        document.getElementById("keyInput").disabled = true;
+        document.querySelector("button").disabled = true;
+    }
+
+    errorBox.style.display = "block";
+}
+</script>
+
+</body>
+</html>
